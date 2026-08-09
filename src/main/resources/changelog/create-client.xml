@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="create-client" author="admin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="client"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="client">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="full_name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="citizenship" type="VARCHAR(128)"/>
+            <column name="client_type" type="VARCHAR(128)"/>
+            <column name="document_number" type="VARCHAR(50)"/>
+            <column name="document_series" type="VARCHAR(50)"/>
+            <column name="document_type" type="VARCHAR(50)"/>
+            <column name="mdm_code" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
