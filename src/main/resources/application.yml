@@ -24,4 +24,10 @@ spring:
 server:
   port: ${SERVER_PORT}
 
+logging:
+  level:
+    liquibase: DEBUG
+    org.springframework.boot.autoconfigure.liquibase: DEBUG
+
+
 

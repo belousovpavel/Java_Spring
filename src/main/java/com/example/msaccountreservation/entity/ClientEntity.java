@@ -1,11 +1,22 @@
 package com.example.msaccountreservation.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "client")
+@Getter
+@Setter
+@NoArgsConstructor
 public class ClientEntity {
     @Id
     @Column(name = "id", columnDefinition = "UUID",nullable = false)
@@ -32,9 +43,17 @@ public class ClientEntity {
     @Column(name = "mdm_code")
     private Long mdmCode;
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AccountEntity> accounts = new ArrayList<>();
 
-    public ClientEntity() {
-    }
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
 
     public ClientEntity(String fullName, String citizenship, String clientType, String documentNumber, String documentSeries, String documentType, Long mdmCode) {
         this.fullName = fullName;
@@ -46,67 +65,4 @@ public class ClientEntity {
         this.mdmCode = mdmCode;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getCitizenship() {
-        return citizenship;
-    }
-
-    public void setCitizenship(String citizenship) {
-        this.citizenship = citizenship;
-    }
-
-    public String getClientType() {
-        return clientType;
-    }
-
-    public void setClientType(String clientType) {
-        this.clientType = clientType;
-    }
-
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    public String getDocumentSeries() {
-        return documentSeries;
-    }
-
-    public void setDocumentSeries(String documentSeries) {
-        this.documentSeries = documentSeries;
-    }
-
-    public String getDocumentType() {
-        return documentType;
-    }
-
-    public void setDocumentType(String documentType) {
-        this.documentType = documentType;
-    }
-
-    public Long getMdmCode() {
-        return mdmCode;
-    }
-
-    public void setMdmCode(Long mdmCode) {
-        this.mdmCode = mdmCode;
-    }
 }

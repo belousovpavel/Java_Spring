@@ -1,22 +1,31 @@
 package com.example.msaccountreservation.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "account")
+@Getter
+@Setter
+@NoArgsConstructor
 public class AccountEntity {
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id",nullable = false)
     private AccountStatusEntity status;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id",nullable = false)
     private ClientEntity client;
 
@@ -26,8 +35,13 @@ public class AccountEntity {
     @Column(name = "currency_code",length = 50)
     private String currencyCode;
 
-    public AccountEntity() {
-    }
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     public AccountEntity(AccountStatusEntity status, ClientEntity client, String accountType, String currencyCode) {
         this.status = status;
@@ -36,43 +50,4 @@ public class AccountEntity {
         this.currencyCode = currencyCode;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public AccountStatusEntity getStatus() {
-        return status;
-    }
-
-    public void setStatus(AccountStatusEntity status) {
-        this.status = status;
-    }
-
-    public ClientEntity getClient() {
-        return client;
-    }
-
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
 }
