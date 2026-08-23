@@ -7,15 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ClientDao {
+public class ClientDaoService {
 
     private final ClientRepository clientRepository;
 
     public Optional<ClientEntity> findByFullName(String fullName){
         return clientRepository.findByFullName(fullName);
+    }
+
+    public Optional<ClientEntity> findById(UUID id){
+        return clientRepository.findById(id);
     }
 }

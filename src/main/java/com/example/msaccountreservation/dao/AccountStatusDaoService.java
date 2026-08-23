@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AccountStatusDao {
+public class AccountStatusDaoService {
 
     private final AccountStatusRepository accountStatusRepository;
 

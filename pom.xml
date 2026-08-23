@@ -71,7 +71,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -92,6 +92,33 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.23.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/ms-upgrade-api.yml</inputSpec>
+                            <generatorName>spring</generatorName>
+                                <apiPackage>com.example.msaccountreservation.api</apiPackage>
+                                <modelPackage>com.example.msaccountreservation.model</modelPackage>
+                                <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                                <configOptions>
+                                    <useSpringBoot3>true</useSpringBoot3>
+                                    <useJakartaEe>true</useJakartaEe>
+                                    <interfaceOnly>true</interfaceOnly>
+                                    <openApiNullable>false</openApiNullable>
+                                </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

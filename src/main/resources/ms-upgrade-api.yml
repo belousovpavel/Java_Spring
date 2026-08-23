@@ -1,0 +1,318 @@
+openapi: 3.0.3
+info:
+  title: Client Management API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+
+paths:
+  /clients:
+    post:
+      summary: Создание нового клиента
+      operationId: createClient
+      tags:
+        - Clients
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreateRequest'
+      responses:
+        '201':
+          description: Клиент успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '400':
+          description: Некорректный запрос
+        '409':
+          description: Клиент уже существует
+        '500':
+          description: Внутренняя ошибка сервера
+
+    get:
+      summary: Поиск клиентов с пагинацией
+      operationId: getClients
+      tags:
+        - Clients
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: page
+          in: query
+          description: Номер страницы (по умолчанию 0)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          description: Размер страницы (по умолчанию 20)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: lastName
+          in: query
+          description: Фильтр по фамилии (частичное совпадение)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ со списком клиентов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ClientResponse'
+                  pageable:
+                    type: object
+                    properties:
+                      pageNumber:
+                        type: integer
+                      pageSize:
+                        type: integer
+                      sort:
+                        type: object
+                  totalElements:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  last:
+                    type: boolean
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+                  first:
+                    type: boolean
+                  numberOfElements:
+                    type: integer
+                  empty:
+                    type: boolean
+        '400':
+          description: Некорректные параметры запроса
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /clients/{clientId}:
+    get:
+      summary: Получение клиента по ID
+      operationId: getClientById
+      tags:
+        - Clients
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientId
+          in: path
+          required: true
+          description: UUID клиента
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Клиент найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '400':
+          description: Неверный формат ID
+        '404':
+          description: Клиент не найден
+        '500':
+          description: Внутренняя ошибка сервера
+
+    put:
+      summary: Обновление клиента
+      operationId: updateClient
+      tags:
+        - Clients
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientId
+          in: path
+          required: true
+          description: UUID клиента
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientUpdateRequest'
+      responses:
+        '200':
+          description: Клиент успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '400':
+          description: Некорректный запрос
+        '404':
+          description: Клиент не найден
+        '409':
+          description: Конфликт данных
+        '500':
+          description: Внутренняя ошибка сервера
+
+    delete:
+      summary: Удаление клиента (soft delete)
+      operationId: deleteClient
+      tags:
+        - Clients
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientId
+          in: path
+          required: true
+          description: UUID клиента
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Клиент успешно удален
+        '400':
+          description: Неверный формат ID
+        '404':
+          description: Клиент не найден
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /clients/{clientId}/exists:
+    get:
+      summary: Проверка существования клиента
+      operationId: checkClientExists
+      tags:
+        - Clients
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientId
+          in: path
+          required: true
+          description: UUID клиента
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Результат проверки существования
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exists:
+                    type: boolean
+                    description: true - клиент существует, false - не найден
+                  clientId:
+                    type: string
+                    format: uuid
+                    description: ID проверяемого клиента
+
+components:
+  parameters:
+    ContentTypeJson:
+      name: Content-Type
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+
+    AcceptJson:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+
+  schemas:
+    ClientCreateRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+        citizenship:
+          type: string
+        clientType:
+          type: string
+        documentNumber:
+          type: string
+        documentSeries:
+          type: string
+        documentType:
+          type: string
+
+    ClientResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        citizenship:
+          type: string
+        clientType:
+          type: string
+        documentNumber:
+          type: string
+        documentSeries:
+          type: string
+        documentType:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ClientUpdateRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+        citizenship:
+          type: string
+        clientType:
+          type: string
+        documentNumber:
+          type: string
+        documentSeries:
+          type: string
+        documentType:
+          type: string
+        status:
+          type: string

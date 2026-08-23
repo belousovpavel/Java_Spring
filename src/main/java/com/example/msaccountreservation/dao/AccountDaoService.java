@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AccountDao {
+public class AccountDaoService {
 
     private final AccountRepository accountRepository;
 

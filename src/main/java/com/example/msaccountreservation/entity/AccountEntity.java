@@ -1,9 +1,7 @@
 package com.example.msaccountreservation.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.stereotype.Controller;
@@ -16,6 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AccountEntity {
     @Id
     @Column(name = "id", nullable = false)
@@ -43,11 +43,5 @@ public class AccountEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public AccountEntity(AccountStatusEntity status, ClientEntity client, String accountType, String currencyCode) {
-        this.status = status;
-        this.client = client;
-        this.accountType = accountType;
-        this.currencyCode = currencyCode;
-    }
 
 }
