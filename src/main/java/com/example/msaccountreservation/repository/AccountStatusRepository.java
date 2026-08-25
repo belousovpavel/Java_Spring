@@ -12,5 +12,4 @@ public interface AccountStatusRepository extends JpaRepository<AccountStatusEnti
 
     Optional<AccountStatusEntity> findByName(String name);
 
-
 }

@@ -5,9 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
 
-    <include file="classpath:changelog/create-account_status.xml"/>
-    <include file="classpath:changelog/create-client.xml"/>
-    <include file="classpath:changelog/create-account.xml"/>
+    <include file="changelog/create-account_status.xml"/>
+    <include file="changelog/create-client.xml"/>
+    <include file="changelog/create-account.xml"/>
 
-    <include file="classpath:changelog/insert-account_status.xml"/>
+    <include file="changelog/insert-account_status.xml"/>
 </databaseChangeLog>
