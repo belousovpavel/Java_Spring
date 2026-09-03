@@ -17,7 +17,7 @@
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            
+
             <column name="status_id" type="INT">
                 <constraints
                         nullable="false"
@@ -25,7 +25,7 @@
                         referencedTableName="account_status"
                         referencedColumnNames="id"/>
             </column>
-            
+
             <column name="client_id" type="UUID">
                 <constraints
                         nullable="false"
@@ -40,11 +40,11 @@
             <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            
+
             <column name="account_type" type="VARCHAR(50)"/>
             <column name="currency_code" type="VARCHAR(50)"/>
-                    
-            
+
+
         </createTable>
     </changeSet>
 

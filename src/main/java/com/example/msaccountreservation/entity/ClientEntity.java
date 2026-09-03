@@ -1,5 +1,6 @@
 package com.example.msaccountreservation.entity;
 
+import com.example.msaccountreservation.model.ClientStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Builder
 public class ClientEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "UUID",nullable = false)
     private UUID id;
 
@@ -41,6 +43,7 @@ public class ClientEntity {
     private String documentType;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(name = "status", nullable = false)
     private ClientStatus status = ClientStatus.ACTIVE;
 

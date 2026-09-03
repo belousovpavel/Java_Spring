@@ -32,30 +32,13 @@ paths:
           description: Bad Request - невалидные данные
 
     get:
-      summary: Поиск клиентов с пагинацией
+      summary: Получение всех клиентов
       operationId: getClients
       tags:
         - Client
       parameters:
         - $ref: '#/components/parameters/ContentTypeJson'
         - $ref: '#/components/parameters/AcceptJson'
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          description: Номер страницы (начиная с 1)
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 20
-          description: Размер страницы
       responses:
         '200':
           description: Ok
@@ -124,7 +107,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ContentTypeJson'
         - $ref: '#/components/parameters/AcceptJson'
-        - name: clientId
+        - name: clientsId
           in: path
           required: true
           schema:
@@ -159,9 +142,7 @@ paths:
           content:
             application/json:
               schema:
-                - $ref: '#/components/parameters/ClientExistResponse'
-
-
+                $ref: '#/components/schemas/ClientExistResponse'
 
 
 components:
@@ -195,24 +176,24 @@ components:
     ClientRequest:
       type: object
       required:
-        -fullName
-        -citizenship
-        -client_type
-        -document_number
-        -document_series
-        -document_type
+        - fullName
+        - citizenship
+        - clientType
+        - documentNumber
+        - documentSeries
+        - documentType
       properties:
         fullName:
           type: string
         citizenship:
           type: string
-        client_type:
+        clientType:
           type: string
-        document_number:
+        documentNumber:
           type: string
-        document_series:
+        documentSeries:
           type: string
-        document_type:
+        documentType:
           type: string
 
     ClientResponse:
@@ -225,13 +206,13 @@ components:
           type: string
         citizenship:
           type: string
-        client_type:
+        clientType:
           type: string
-        document_number:
+        documentNumber:
           type: string
-        document_series:
+        documentSeries:
           type: string
-        document_type:
+        documentType:
           type: string
         status:
           type: string
@@ -252,13 +233,13 @@ components:
           type: string
         citizenship:
           type: string
-        client_type:
+        clientType:
           type: string
-        document_number:
+        documentNumber:
           type: string
-        document_series:
+        documentSeries:
           type: string
-        document_type:
+        documentType:
           type: string
         status:
           type: string
@@ -278,15 +259,7 @@ components:
         content:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uuid
-              fullName:
-                type: string
-              status:
-                $ref: '#/components/schemas/ClientStatus'
+            $ref: '#/components/schemas/ClientResponse'
         pageable:
           type: object
           properties:
@@ -298,6 +271,7 @@ components:
               type: integer
             totalElements:
               type: integer
+              format: int64
 
     UpdateClient:
       type: object

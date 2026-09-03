@@ -28,6 +28,8 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <lombok.version>1.18.30</lombok.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
     <dependencies>
 
@@ -56,7 +58,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -123,6 +127,18 @@
             <version>0.2.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -130,6 +146,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-run</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -147,7 +174,7 @@
                             <generatorName>spring</generatorName>
                             <apiPackage>com.example.msaccountreservation.api</apiPackage>
                             <modelPackage>com.example.msaccountreservation.model</modelPackage>
-                            <apiNameSuffix>Client</apiNameSuffix>
+                            <apiNameSuffix>Api</apiNameSuffix>
                             <configOptions>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <interfaceOnly>true</interfaceOnly>
@@ -167,6 +194,28 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
 
         </plugins>
