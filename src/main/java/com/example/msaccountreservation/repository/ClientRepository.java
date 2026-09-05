@@ -12,4 +12,6 @@ public interface ClientRepository extends JpaRepository<ClientEntity, UUID> {
 
     Optional<ClientEntity> findByFullName(String fullName);
 
+    Optional<ClientEntity> findByDocumentNumberAndDocumentSeries(String documentNumber, String documentSeries);
+
 }

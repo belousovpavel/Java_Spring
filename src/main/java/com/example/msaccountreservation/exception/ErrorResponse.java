@@ -20,7 +20,6 @@ public class ErrorResponse {
     private String errorDescription;
     private String message;
     private String path;
-    private Map<String, String> errors;
 
     public static ErrorResponse of(ErrorCode errorCode, String message, String path) {
         return ErrorResponse.builder()
@@ -34,16 +33,4 @@ public class ErrorResponse {
                 .build();
     }
 
-    public static ErrorResponse of(ErrorCode errorCode, String message, String path, Map<String, String> errors) {
-        return ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .statusCode(errorCode.getStatusCode())
-                .error(HttpStatus.valueOf(errorCode.getStatusCode()).getReasonPhrase())
-                .errorCode(errorCode.getCode())
-                .errorDescription(errorCode.getDescription())
-                .message(message)
-                .path(path)
-                .errors(errors)
-                .build();
-    }
 }

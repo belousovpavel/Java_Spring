@@ -185,16 +185,22 @@ components:
       properties:
         fullName:
           type: string
+          minLength: 1
         citizenship:
           type: string
+          minLength: 1
         clientType:
           type: string
+          minLength: 1
         documentNumber:
           type: string
+          minLength: 1
         documentSeries:
           type: string
+          minLength: 1
         documentType:
           type: string
+          minLength: 1
 
     ClientResponse:
       type: object

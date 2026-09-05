@@ -41,4 +41,8 @@ public class ClientDaoService {
         return clientRepository.save(entity);
     }
 
+    public Optional<ClientEntity> findByDocumentNumberAndDocumentSeries(String documentNumber, String documentSeries) {
+        log.debug("Поиск клиента по номеру и серии");
+        return clientRepository.findByDocumentNumberAndDocumentSeries(documentNumber, documentSeries);
+    }
 }

@@ -2,6 +2,9 @@ package com.example.msaccountreservation.service;
 
 import com.example.msaccountreservation.dao.ClientDaoService;
 import com.example.msaccountreservation.entity.ClientEntity;
+import com.example.msaccountreservation.exception.ClientAlreadyExistsException;
+import com.example.msaccountreservation.exception.ClientNotFoundException;
+import com.example.msaccountreservation.exception.InvalidDataException;
 import com.example.msaccountreservation.mapper.ClientMapper;
 import com.example.msaccountreservation.model.*;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,17 @@ public class ClientService {
     @Transactional
     public ClientResponse createClient(ClientRequest request){
         log.info("Создание нового клиента: {}", request.getFullName());
+
+        clientDaoService.findByDocumentNumberAndDocumentSeries(
+                request.getDocumentNumber(),
+                request.getDocumentSeries()
+        ).ifPresent(existing -> {
+            throw new ClientAlreadyExistsException(
+                    "Клиент с документом: серия '" + request.getDocumentSeries() +
+                            "', номер '" + request.getDocumentNumber() + "' уже существует"
+            );
+        });
+
         ClientEntity entity = clientMapper.toEntity(request);
         ClientEntity saved = clientDaoService.save(entity);
         log.info("Клиент создан с ID: {}", saved.getId());
@@ -32,10 +46,14 @@ public class ClientService {
     }
 
     public ClientResponseById getClientById(UUID id) {
-        log.info("🔍 Получение клиента по id: {}", id);
+        log.info("Получение клиента по id: {}", id);
+
+        if (id == null) {
+            throw new InvalidDataException("ID не может быть пустым");
+        }
 
         ClientEntity entity = clientDaoService.findById(id)
-                .orElse(null);
+                .orElseThrow(()-> new ClientNotFoundException("Клиент с таким id: "+ id + " не найден"));
 
         ClientResponseById response = clientMapper.toResponseById(entity);
 
@@ -68,7 +86,7 @@ public class ClientService {
         log.info("Удаление клиента: {}", id);
 
         ClientEntity entity = clientDaoService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Клиент не найден с id: " + id));
+                .orElseThrow(()-> new ClientNotFoundException("Клиент с таким id: "+ id + " не найден"));
 
         entity.setStatus(ClientStatus.DELETED);
         clientDaoService.save(entity);
@@ -81,7 +99,11 @@ public class ClientService {
         log.info("Обновление клиента: {}", id);
 
         ClientEntity entity = clientDaoService.findById(id)
-                .orElse(null);
+                .orElseThrow(()-> new ClientNotFoundException("Клиент с таким id: "+ id + " не найден"));
+
+        if (updateClient.getFullName() != null && updateClient.getFullName().isBlank()) {
+            throw new InvalidDataException("Имя не может быть пустым");
+        }
 
         clientMapper.updateEntity(entity,updateClient);
 
