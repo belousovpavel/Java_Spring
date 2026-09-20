@@ -1,0 +1,328 @@
+openapi: 3.0.3
+info:
+  title: Client Management API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+
+paths:
+  /clients:
+    post:
+      summary: Создание нового клиента
+      operationId: createClient
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequest'
+      responses:
+        '201':
+          description: Клиент создан(Created)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+        '400':
+          description: Bad Request - невалидные данные
+
+    get:
+      summary: Получение всех клиентов
+      operationId: getClients
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientsResponse'
+
+
+  /clients/{clientsId}:
+    get:
+      summary: Получение клиента по id
+      operationId: getClientsById
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientsId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Идентификатор клиента
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponseById'
+
+    put:
+      summary: Обновление клиента
+      operationId: updateClient
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientsId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Идентификатор клиента
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClient'
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found - клиент не найден
+        '400':
+          description: Bad Request - невалидные данные
+
+    delete:
+      summary: Удаление клиента (soft delete)
+      operationId: deleteClientById
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientsId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Уникальный идентификатор клиента
+      responses:
+        '204':
+          description: Клиент успешно удалён
+        '404':
+          description: Not Found - клиент не найден
+        '409':
+          description: Conflict - у клиента есть активные счета
+
+  /clients/{clientId}/exists:
+    get:
+      summary: Проверка существования клиента
+      operationId: checkClient
+      parameters:
+        - $ref: '#/components/parameters/ContentTypeJson'
+        - $ref: '#/components/parameters/AcceptJson'
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Идентификатор клиента
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientExistResponse'
+
+
+components:
+  parameters:
+    ContentTypeJson:
+      name: Content-Type
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+
+    AcceptJson:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+
+  schemas:
+    ClientStatus:
+      type: string
+      enum: [ ACTIVE, BLOCKED, DELETED ]
+      description: Статус клиента
+
+    ClientRequest:
+      type: object
+      required:
+        - fullName
+        - citizenship
+        - clientType
+        - documentNumber
+        - documentSeries
+        - documentType
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+        citizenship:
+          type: string
+          minLength: 1
+        clientType:
+          type: string
+          minLength: 1
+        documentNumber:
+          type: string
+          minLength: 1
+        documentSeries:
+          type: string
+          minLength: 1
+        documentType:
+          type: string
+          minLength: 1
+
+    ClientResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        citizenship:
+          type: string
+        clientType:
+          type: string
+        documentNumber:
+          type: string
+        documentSeries:
+          type: string
+        documentType:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ClientResponseById:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        citizenship:
+          type: string
+        clientType:
+          type: string
+        documentNumber:
+          type: string
+        documentSeries:
+          type: string
+        documentType:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        hasAccounts:
+          type: boolean
+          default: true
+
+    ClientsResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientResponse'
+        pageable:
+          type: object
+          properties:
+            pageNumber:
+              type: integer
+            pageSize:
+              type: integer
+            totalPage:
+              type: integer
+            totalElements:
+              type: integer
+              format: int64
+
+    UpdateClient:
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: Имя клиента
+        citizenship:
+          type: string
+          description: Гражданство
+        clientType:
+          type: string
+          description: Тип клиента
+        documentNumber:
+          type: string
+          description: Номер документа
+        documentSeries:
+          type: string
+          description: Серия документа
+        documentType:
+          type: string
+          description: Тип документа
+        status:
+          $ref: '#/components/schemas/ClientStatus'
+
+    ClientExistResponse:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          description: Есть ли аккаунт с таким Id
+        clientId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/ClientStatus'
+
+
+
+
+
+
+
+
+
+
+
+

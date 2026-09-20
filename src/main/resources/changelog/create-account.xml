@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="create-account" author="admin">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="account"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="account">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="status_id" type="INT">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_account_status"
+                        referencedTableName="account_status"
+                        referencedColumnNames="id"/>
+            </column>
+
+            <column name="client_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_account_client"
+                        referencedTableName="client"
+                        referencedColumnNames="id"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="account_type" type="VARCHAR(50)"/>
+            <column name="currency_code" type="VARCHAR(50)"/>
+
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
