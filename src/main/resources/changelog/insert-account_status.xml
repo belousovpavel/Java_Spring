@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+    <changeSet id="insert-account_status" author="admin">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="account_status"/>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM account_status
+                </sqlCheck>
+            </and>
+        </preConditions>
+
+        <insert tableName="account_status">
+            <column name="name" value="NEW"/>
+            <column name="description" value="Счёт создан в БД"/>
+        </insert>
+
+        <insert tableName="account_status">
+            <column name="name" value="IN_CREATION"/>
+            <column name="description" value="Запрос на создание счета был отправлен в смежную систему"/>
+        </insert>
+
+        <insert tableName="account_status">
+            <column name="name" value="CREATED"/>
+            <column name="description" value="Счёт создан в смежной системе"/>
+        </insert>
+
+        <insert tableName="account_status">
+            <column name="name" value="CANCELLED"/>
+            <column name="description" value="Счёт аннулирован"/>
+        </insert>
+
+        <insert tableName="account_status">
+            <column name="name" value="CLOSED"/>
+            <column name="description" value="Счёт закрыт"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
