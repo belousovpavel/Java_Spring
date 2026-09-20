@@ -5,6 +5,7 @@ import com.example.msaccountreservation.model.*;
 import com.example.msaccountreservation.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -30,9 +31,9 @@ public class ClientController implements ClientsApi {
 
     @Override
     public void deleteClientById(String contentType, String accept, UUID clientId) {
-        log.info("📥 DELETE /clients/{} - Удаление клиента", clientId);
+        log.info("DELETE /clients/{} - Удаление клиента", clientId);
         clientService.deleteClient(clientId);
-        log.info("✅ Клиент успешно удален: {}", clientId);
+        log.info("Клиент успешно удален: {}", clientId);
     }
 
     @Override

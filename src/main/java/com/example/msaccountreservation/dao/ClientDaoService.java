@@ -19,7 +19,6 @@ public class ClientDaoService {
 
     private final ClientRepository clientRepository;
 
-
     public Optional<ClientEntity> findByFullName(String fullName) {
         log.debug("Поиск клиента по fullName: {}", fullName);
         return clientRepository.findByFullName(fullName);

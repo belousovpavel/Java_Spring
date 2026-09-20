@@ -10,7 +10,6 @@ public class MsAccountReservationApplication {
 
     private static final Logger log = LoggerFactory.getLogger(MsAccountReservationApplication.class);
     public static void main(String[] args) {
-        log.info("Программа запустилась!");
         SpringApplication.run(MsAccountReservationApplication.class, args);
     }
 
