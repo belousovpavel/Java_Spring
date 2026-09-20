@@ -2,9 +2,7 @@ package com.example.msaccountreservation.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
@@ -12,6 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AccountStatusEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
