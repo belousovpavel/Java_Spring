@@ -29,5 +29,10 @@ logging:
     liquibase: DEBUG
     org.springframework.boot.autoconfigure.liquibase: DEBUG
 
+app:
+  currency-client:
+    base-url: ${CURRENCY_BASE_URL:https://api.currencyapi.com/v3}
+    api-key: ${CURRENCY_API_KEY}
+
 
 
